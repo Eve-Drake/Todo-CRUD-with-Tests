@@ -17,10 +17,6 @@ function App() {
       setTasks([...tasks, {task : taskText, id: Math.floor(Math.random()* 10000), complete: false }]);
       setTaskText('')
     }
-    else{
-      throw new Error('Please add a task')
-    }
-
   }
 
   const deleteTask = (id : number) =>{
