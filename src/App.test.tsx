@@ -121,3 +121,31 @@ test('Add multiple tasks and complete one', () =>{
 
   expect(getAllTasks[0]).toHaveClass('complete')
 })
+
+test('Check filtering system', () =>{
+  render(<App />)
+  const input = screen.getByLabelText('Task:')
+  const addBtn = screen.getByText('Add')
+  
+  fireEvent.change(input, {target: {value: 'Complete Task 1'}})
+  fireEvent.click(addBtn)
+  fireEvent.change(input, {target: {value: 'Complete Task 2'}})
+  fireEvent.click(addBtn)
+
+  const setCompleteBtn = screen.getAllByText('Mark Complete')
+  fireEvent.click(setCompleteBtn[0])
+  fireEvent.click(setCompleteBtn[1])
+
+  fireEvent.change(input, {target: {value: 'Incomplete Task 1'}})
+  fireEvent.click(addBtn)
+  fireEvent.change(input, {target: {value: 'Incomplete Task 2'}})
+  fireEvent.click(addBtn)
+
+  const select = screen.getByLabelText('Select:')
+  fireEvent.change(select, {target : {value : 'incomplete'}})
+
+  const getAllIncompleteTasks = screen.getAllByText(/^Incomplete Task \d$/)
+  const getAllCompleteTasks = screen.queryAllByText(/^Complete Task \d$/)
+  expect(getAllIncompleteTasks).toHaveLength(2)
+  expect(getAllCompleteTasks).toHaveLength(0)
+})
